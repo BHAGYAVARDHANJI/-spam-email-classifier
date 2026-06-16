@@ -126,5 +126,4 @@ curl -X POST http://localhost:5000/api/predict \
 
 ## 👤 Author
 
-**Your Name** — Internship Project  
-[GitHub](https://github.com/YOUR_USERNAME) · [LinkedIn](https://linkedin.com/in/YOUR_PROFILE)
+**Bhagya Vardhan Jaiswal**

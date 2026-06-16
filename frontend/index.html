@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spam Classifier — ML Project</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="static/css/style.css" />
+</head>
+<body>
+
+  <!-- ── Header ─────────────────────────────────────────── -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">⚡</span>
+        <span class="logo-text">SpamShield</span>
+        <span class="logo-badge">ML</span>
+      </div>
+      <nav class="nav-pills">
+        <button class="nav-pill active" onclick="showSection('classify')">Classify</button>
+        <button class="nav-pill" onclick="showSection('batch')">Batch</button>
+        <button class="nav-pill" onclick="showSection('metrics')">Metrics</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ── Hero ───────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="hero-eyebrow">Naive Bayes · NLP · Python</p>
+      <h1 class="hero-title">Is it <span class="accent">Spam</span><br>or <span class="accent-ham">Ham?</span></h1>
+      <p class="hero-sub">Paste any email and our ML model classifies it in milliseconds.</p>
+    </div>
+    <div class="hero-gfx" aria-hidden="true">
+      <div class="gfx-ring r1"></div>
+      <div class="gfx-ring r2"></div>
+      <div class="gfx-ring r3"></div>
+      <div class="gfx-dot"></div>
+    </div>
+  </section>
+
+  <main class="main-content">
+
+    <!-- ── Classify Section ───────────────────────────────── -->
+    <section id="section-classify" class="section active">
+      <div class="card classify-card">
+        <div class="card-label">SINGLE EMAIL CLASSIFIER</div>
+        <textarea
+          id="emailInput"
+          class="email-input"
+          placeholder="Paste your email text here…&#10;&#10;e.g. WINNER!!! You have been selected to receive a FREE prize. Click now to claim!"
+          rows="7"
+        ></textarea>
+        <div class="input-footer">
+          <span class="char-count" id="charCount">0 characters</span>
+          <div class="btn-group">
+            <button class="btn btn-ghost" onclick="clearInput()">Clear</button>
+            <button class="btn btn-primary" onclick="classifyEmail()" id="classifyBtn">
+              <span class="btn-icon">→</span> Classify
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Result Card -->
+      <div class="card result-card hidden" id="resultCard">
+        <div class="result-verdict" id="resultVerdict"></div>
+        <div class="result-detail">
+          <div class="prob-row">
+            <span class="prob-label">Spam probability</span>
+            <div class="prob-bar-wrap">
+              <div class="prob-bar spam-bar" id="spamBar"></div>
+            </div>
+            <span class="prob-value" id="spamProb">—</span>
+          </div>
+          <div class="prob-row">
+            <span class="prob-label">Ham probability</span>
+            <div class="prob-bar-wrap">
+              <div class="prob-bar ham-bar" id="hamBar"></div>
+            </div>
+            <span class="prob-value" id="hamProb">—</span>
+          </div>
+        </div>
+        <p class="result-preview" id="resultPreview"></p>
+      </div>
+
+      <!-- Quick Test Buttons -->
+      <div class="quick-tests">
+        <p class="quick-label">Try a sample →</p>
+        <button class="chip" onclick="setExample('spam1')">🚨 Spam example</button>
+        <button class="chip" onclick="setExample('spam2')">💰 Prize scam</button>
+        <button class="chip" onclick="setExample('ham1')">📅 Meeting invite</button>
+        <button class="chip" onclick="setExample('ham2')">👋 Casual email</button>
+      </div>
+    </section>
+
+    <!-- ── Batch Section ──────────────────────────────────── -->
+    <section id="section-batch" class="section hidden">
+      <div class="card">
+        <div class="card-label">BATCH CLASSIFIER — ONE EMAIL PER LINE</div>
+        <textarea
+          id="batchInput"
+          class="email-input"
+          placeholder="Email 1 text here&#10;Email 2 text here&#10;Email 3 text here"
+          rows="8"
+        ></textarea>
+        <div class="input-footer">
+          <span></span>
+          <button class="btn btn-primary" onclick="batchClassify()">
+            <span class="btn-icon">⚡</span> Run Batch
+          </button>
+        </div>
+      </div>
+
+      <div id="batchResults" class="batch-results hidden"></div>
+    </section>
+
+    <!-- ── Metrics Section ────────────────────────────────── -->
+    <section id="section-metrics" class="section hidden">
+      <div class="metrics-grid" id="metricsGrid">
+        <div class="metric-card skeleton"></div>
+        <div class="metric-card skeleton"></div>
+        <div class="metric-card skeleton"></div>
+        <div class="metric-card skeleton"></div>
+      </div>
+
+      <div class="card cm-card">
+        <div class="card-label">CONFUSION MATRIX</div>
+        <div class="cm-grid" id="cmGrid">
+          <div class="cm-cell header-cell"></div>
+          <div class="cm-cell header-cell">Pred: Ham</div>
+          <div class="cm-cell header-cell">Pred: Spam</div>
+          <div class="cm-cell header-cell">Actual: Ham</div>
+          <div class="cm-cell value-cell tn" id="cmTN">—</div>
+          <div class="cm-cell value-cell fp" id="cmFP">—</div>
+          <div class="cm-cell header-cell">Actual: Spam</div>
+          <div class="cm-cell value-cell fn" id="cmFN">—</div>
+          <div class="cm-cell value-cell tp" id="cmTP">—</div>
+        </div>
+        <div class="cm-legend">
+          <span class="legend-item tn-leg">TN = True Negative</span>
+          <span class="legend-item fp-leg">FP = False Positive</span>
+          <span class="legend-item fn-leg">FN = False Negative</span>
+          <span class="legend-item tp-leg">TP = True Positive</span>
+        </div>
+      </div>
+
+      <div class="card info-card">
+        <div class="card-label">MODEL INFO</div>
+        <div class="info-grid" id="infoGrid"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Built with <strong>Flask + Scikit-learn</strong> · Multinomial Naive Bayes · Internship Project</p>
+  </footer>
+
+  <script src="static/js/app.js"></script>
+</body>
+</html>

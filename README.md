@@ -59,7 +59,7 @@ pip install -r requirements.txt
 cd backend
 python app.py
 ```
-Server starts at: **http://localhost:5000**
+Server starts at: **https://spam-email-classifier-haqa.onrender.com**
 
 ### 5. Open the frontend
 Open `frontend/index.html` in your browser — or just visit **http://localhost:5000** (Flask serves it automatically).

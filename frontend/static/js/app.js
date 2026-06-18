@@ -1,7 +1,7 @@
 /* ── Config ──────────────────────────────────────────────────────────── */
-const API = window.location.hostname === 'localhost' 
-  ? 'http://localhost:5000/api' 
-  : '/api';
+const API = window.location.hostname === 'localhost'
+  ? 'http://localhost:5000/api'
+  : 'https://spam-email-classifier-haqa.onrender.com/api';
 
 /* ── Samples ─────────────────────────────────────────────────────────── */
 const SAMPLES = {
